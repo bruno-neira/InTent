@@ -50,24 +50,11 @@ class IntentionalLinkedIn {
   }
 
   private hideLinkedInFeed() {
-    // Hide the main LinkedIn feed
-    const feedSelectors = [
-      'main[role="main"]',
-      '.feed-identity-module',
-      '.feed-shared-update-v2',
-      '.feed-shared-text',
-      '.feed-shared-image',
-      '.feed-shared-video'
-    ]
-
-    feedSelectors.forEach(selector => {
-      const elements = document.querySelectorAll(selector)
-      elements.forEach(element => {
-        if (element instanceof HTMLElement) {
-          element.style.display = 'none'
-        }
-      })
-    })
+    // Hide only the main feed container
+    const feedContent = document.querySelector('.scaffold-finite-scroll__content[data-finite-scroll-hotkey-context="FEED"]');
+    if (feedContent && feedContent instanceof HTMLElement) {
+      feedContent.style.display = 'none';
+    }
   }
 
   private toggleChatInterface() {

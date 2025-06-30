@@ -10,14 +10,7 @@ A browser extension that helps you stay focused on LinkedIn by replacing the dis
 - **Keyboard Shortcuts**: Quick toggle with `Ctrl/Cmd + Shift + L`
 - **Customizable Settings**: Control feed hiding and extension behavior
 
-## Tech Stack
 
-- **Browser Extension**: Manifest V3
-- **Frontend**: React + Tailwind CSS
-- **Build Tool**: Vite + CRXJS
-- **LLM**: OpenAI API (GPT-3.5-turbo)
-- **Storage**: Chrome Storage API
-- **LinkedIn Integration**: DOM parsing + existing search
 
 ## Setup Instructions
 
@@ -155,13 +148,4 @@ MIT License - see LICENSE file for details
 
 ## Support
 
-For issues and feature requests, please create an issue in the repository.
-
-## Roadmap
-
-- [ ] LinkedIn profile analysis
-- [ ] Job application tracking
-- [ ] Networking suggestions
-- [ ] Content curation
-- [ ] Analytics dashboard
-- [ ] Multiple AI providers support 
+For issues and feature requests, please create an issue in the repository. 
