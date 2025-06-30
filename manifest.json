@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Intentional LinkedIn",
+  "version": "1.0.0",
+  "description": "Stay focused on LinkedIn with AI-powered intentional browsing",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://*.linkedin.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://*.linkedin.com/*"],
+      "js": ["src/content/content.tsx"],
+      "css": ["src/content/content.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "service_worker": "src/background/background.ts"
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "Intentional LinkedIn"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["src/content/content.css"],
+      "matches": ["https://*.linkedin.com/*"]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.svg",
+    "48": "icons/icon48.svg",
+    "128": "icons/icon128.svg"
+  }
+} 

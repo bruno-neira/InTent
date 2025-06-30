@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intentional LinkedIn</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon">IL</div>
+        <h1>Intentional LinkedIn</h1>
+      </div>
+    </div>
+    
+    <div class="content">
+      <div class="section">
+        <h2>Settings</h2>
+        
+        <div class="setting-item">
+          <label for="api-key">OpenAI API Key:</label>
+          <input type="password" id="api-key" placeholder="Enter your OpenAI API key">
+          <button id="save-api-key" class="btn-primary">Save</button>
+        </div>
+        
+        <div class="setting-item">
+          <label class="checkbox-label">
+            <input type="checkbox" id="auto-hide-feed">
+            <span class="checkmark"></span>
+            Auto-hide LinkedIn feed
+          </label>
+        </div>
+        
+        <div class="setting-item">
+          <label class="checkbox-label">
+            <input type="checkbox" id="enabled">
+            <span class="checkmark"></span>
+            Enable extension
+          </label>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2>Keyboard Shortcuts</h2>
+        <p class="shortcut-info">
+          <strong>Ctrl/Cmd + Shift + L:</strong> Toggle chat interface
+        </p>
+      </div>
+      
+      <div class="section">
+        <h2>About</h2>
+        <p class="about-text">
+          Intentional LinkedIn helps you stay focused on your LinkedIn goals by replacing the distracting feed with an AI-powered chat interface.
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <script type="module" src="popup.js"></script>
+</body>
+</html> 
