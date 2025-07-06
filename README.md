@@ -26,7 +26,7 @@ A browser extension that helps you stay focused on LinkedIn by replacing the dis
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd intentional-linkedin
+   cd intent
    ```
 
 2. **Install dependencies**

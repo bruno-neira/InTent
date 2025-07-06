@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "watch": "vite build --watch"
+    "watch": "vite build --watch",
+    "test": "echo 'No tests specified yet' && exit 0",
+    "test:docker": "docker-compose run --rm intent-test",
+    "build:docker": "./build_docker.sh",
+    "dev:docker": "docker-compose up intent-dev"
   },
   "dependencies": {
     "react": "^18.2.0",
