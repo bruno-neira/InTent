@@ -1,0 +1,11 @@
+# This project is a browser extension written in TypeScript/JavaScript with React
+# Dependencies are managed through package.json with npm/yarn, not pip
+# 
+# If you need to add Python dependencies for development tools or scripts,
+# add them below this comment.
+
+# Example development dependencies (uncomment if needed):
+# requests>=2.31.0
+# beautifulsoup4>=4.12.0
+# selenium>=4.15.0
+

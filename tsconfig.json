@@ -15,8 +15,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["chrome"]
+    "types": ["chrome", "vitest/globals", "@testing-library/jest-dom"]
   },
-  "include": ["src"],
+  "include": ["src", "tests", "vitest.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 } 
