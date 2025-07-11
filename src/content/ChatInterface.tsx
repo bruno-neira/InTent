@@ -1,154 +1,61 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
-interface Message {
-  id: string
-  content: string
-  sender: 'user' | 'assistant'
-  timestamp: Date
+const CHAT_INPUT_ID = 'intentional-linkedin-chat-input'
+
+const injectChatInputStyle = () => {
+  if (document.getElementById('intentional-linkedin-chat-style')) return;
+  const style = document.createElement('style');
+  style.id = 'intentional-linkedin-chat-style';
+  style.innerHTML = `
+    #${CHAT_INPUT_ID} {
+      width: 100% !important;
+      padding-left: 2rem !important;
+      padding-right: 2rem !important;
+      padding-top: 2rem !important;
+      padding-bottom: 2rem !important;
+      border-radius: 9999px !important;
+      background: #fff !important;
+      border: none !important;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.06) !important;
+      font-size: 1.5rem !important;
+      font-weight: 500 !important;
+      color: #222 !important;
+      outline: none !important;
+    }
+    #${CHAT_INPUT_ID}::placeholder {
+      color: #555 !important;
+      opacity: 1 !important;
+      font-weight: 400 !important;
+    }
+  `;
+  document.head.appendChild(style);
 }
 
 const ChatInterface: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      content: "Hi! I'm your Intentional LinkedIn assistant. What would you like to accomplish on LinkedIn today? I can help you find jobs, connect with people, learn about topics, or discover relevant content.",
-      sender: 'assistant',
-      timestamp: new Date()
-    }
-  ])
   const [inputValue, setInputValue] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
 
   useEffect(() => {
-    scrollToBottom()
-  }, [messages])
+    injectChatInputStyle();
+  }, [])
 
-  const handleSendMessage = async () => {
-    if (!inputValue.trim() || isLoading) return
-
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      content: inputValue,
-      sender: 'user',
-      timestamp: new Date()
-    }
-
-    setMessages(prev => [...prev, userMessage])
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault()
     setInputValue('')
-    setIsLoading(true)
-
-    try {
-      // Send message to background script for OpenAI API call
-      const response = await chrome.runtime.sendMessage({
-        type: 'SEND_MESSAGE',
-        message: inputValue
-      })
-
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: response.reply || 'Sorry, I encountered an error. Please try again.',
-        sender: 'assistant',
-        timestamp: new Date()
-      }
-
-      setMessages(prev => [...prev, assistantMessage])
-    } catch (error) {
-      console.error('Error sending message:', error)
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content: 'Sorry, I encountered an error. Please try again.',
-        sender: 'assistant',
-        timestamp: new Date()
-      }
-      setMessages(prev => [...prev, errorMessage])
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSendMessage()
-    }
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-2xl w-full max-w-2xl h-[600px] flex flex-col mx-auto my-8">
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-linkedin-blue rounded-full flex items-center justify-center">
-            <span className="text-white font-bold text-sm">IL</span>
-          </div>
-          <h1 className="text-lg font-semibold text-gray-800">Intentional LinkedIn</h1>
-        </div>
-      </div>
-
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
-            <div
-              className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                message.sender === 'user'
-                  ? 'bg-linkedin-blue text-white'
-                  : 'bg-gray-100 text-gray-800'
-              }`}
-            >
-              <p className="text-sm">{message.content}</p>
-              <p className="text-xs opacity-70 mt-1">
-                {message.timestamp.toLocaleTimeString()}
-              </p>
-            </div>
-          </div>
-        ))}
-        {isLoading && (
-          <div className="flex justify-start">
-            <div className="bg-gray-100 text-gray-800 max-w-xs lg:max-w-md px-4 py-2 rounded-lg">
-              <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-              </div>
-            </div>
-          </div>
-        )}
-        <div ref={messagesEndRef} />
-      </div>
-
-      {/* Input */}
-      <div className="p-4 border-t border-gray-200">
-        <div className="flex space-x-2">
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="What would you like to do on LinkedIn?"
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-linkedin-blue focus:border-transparent"
-            disabled={isLoading}
-          />
-          <button
-            onClick={handleSendMessage}
-            disabled={!inputValue.trim() || isLoading}
-            className="px-4 py-2 bg-linkedin-blue text-white rounded-lg hover:bg-linkedin-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
+    <form
+      onSubmit={handleSendMessage}
+      className="w-full flex justify-center items-center py-8"
+    >
+      <input
+        id={CHAT_INPUT_ID}
+        type="text"
+        value={inputValue}
+        onChange={e => setInputValue(e.target.value)}
+        placeholder="What are you looking to do?"
+      />
+    </form>
   )
 }
 
