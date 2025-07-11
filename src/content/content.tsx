@@ -25,36 +25,47 @@ class IntentionalLinkedIn {
   }
 
   private setupChatInterface() {
+    // Find the feed container
+    const feedContent = document.querySelector('.scaffold-finite-scroll__content[data-finite-scroll-hotkey-context="FEED"]');
+    if (!feedContent) return;
+
+    // Remove all children (feed posts)
+    while (feedContent.firstChild) {
+      feedContent.removeChild(feedContent.firstChild);
+    }
+
     // Create chat interface container
-    this.chatContainer = document.createElement('div')
-    this.chatContainer.id = 'intentional-linkedin-chat'
+    this.chatContainer = document.createElement('div');
+    this.chatContainer.id = 'intentional-linkedin-chat';
     this.chatContainer.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
       width: 100%;
-      height: 100%;
-      z-index: 9999;
-      background: rgba(0, 0, 0, 0.8);
+      min-height: 400px;
       display: flex;
       justify-content: center;
-      align-items: center;
-    `
+      align-items: flex-start;
+      background: transparent;
+    `;
 
     // Render React component
-    const root = ReactDOM.createRoot(this.chatContainer)
-    root.render(<ChatInterface onClose={() => this.toggleChatInterface()} />)
+    const root = ReactDOM.createRoot(this.chatContainer);
+    root.render(<ChatInterface />);
 
-    document.body.appendChild(this.chatContainer)
-    this.isActive = true
+    feedContent.appendChild(this.chatContainer);
+    this.isActive = true;
+
+    // MutationObserver to keep only the chat interface
+    const observer = new MutationObserver(() => {
+      Array.from(feedContent.children).forEach(child => {
+        if (child !== this.chatContainer) {
+          feedContent.removeChild(child);
+        }
+      });
+    });
+    observer.observe(feedContent, { childList: true });
   }
 
   private hideLinkedInFeed() {
-    // Hide only the main feed container
-    const feedContent = document.querySelector('.scaffold-finite-scroll__content[data-finite-scroll-hotkey-context="FEED"]');
-    if (feedContent && feedContent instanceof HTMLElement) {
-      feedContent.style.display = 'none';
-    }
+    // No longer needed, handled in setupChatInterface
   }
 
   private toggleChatInterface() {
